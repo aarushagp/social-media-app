@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Notifications</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <h1>Your Notifications</h1>
+  <button id="markReadBtn" onclick="markAllAsRead()">Mark all as read</button>
+  <div id="notificationsList">Loading...</div>
+  <a href="index.html">⬅ Back to Feed</a>
+  <script>
+    const API_BASE = "http://localhost:5000/api";
+    const notificationsList = document.getElementById("notificationsList");
+    const user = JSON.parse(localStorage.getItem("user"));
+
+    async function loadNotifications() {
+      try {
+        const res = await fetch(`${API_BASE}/users/${user._id}/notifications`);
+        const data = await res.json();
+        notificationsList.innerHTML = "";
+        if (!data.notifications.length) {
+          notificationsList.innerHTML = "<p>No notifications yet.</p>";
+          return;
+        }
+        data.notifications.forEach(notif => {
+          const div = document.createElement("div");
+          div.className = "notification";
+          div.innerHTML = `<p><strong>${notif.fromUser?.name || "Someone"}</strong> ${notif.type} on your post</p><small>${notif.read ? "✅ Read" : "🆕 Unread"}</small>`;
+          notificationsList.appendChild(div);
+        });
+      } catch (err) {
+        notificationsList.innerHTML = "<p>Error loading notifications.</p>";
+      }
+    }
+
+    async function markAllAsRead() {
+      try {
+        await fetch(`${API_BASE}/users/${user._id}/notifications/mark-all-read`, { method: "PUT" });
+        loadNotifications();
+      } catch (err) {
+        alert("Failed to mark notifications as read");
+      }
+    }
+
+    if (user && user._id) loadNotifications();
+    else notificationsList.innerHTML = '<p>Please <a href="login.html?redirect=notifications.html">login</a>.</p>';
+  </script>
+</body>
+</html>

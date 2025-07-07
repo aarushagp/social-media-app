@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Test Comment POST</title>
+</head>
+<body>
+  <h2>Post a Comment</h2>
+  <form id="commentForm">
+    <label>User ID: <input type="text" id="userId" value="6866bc0995d6ab1e13346a5c" /></label><br /><br />
+    <label>Post ID: <input type="text" id="postId" value="68674da4a40ea959a4cf3f4a" /></label><br /><br />
+    <label>Comment: <input type="text" id="commentText" value="Nice post!" /></label><br /><br />
+    <button type="submit">Send</button>
+  </form>
+
+  <pre id="output"></pre>
+
+  <script>
+    document.getElementById("commentForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const userId = document.getElementById("userId").value;
+      const postId = document.getElementById("postId").value;
+      const text = document.getElementById("commentText").value;
+
+      const res = await fetch(`http://localhost:5000/api/posts/${postId}/comment`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ userId, text })
+      });
+
+      const data = await res.json();
+      document.getElementById("output").textContent = JSON.stringify(data, null, 2);
+    });
+  </script>
+</body>
+</html>

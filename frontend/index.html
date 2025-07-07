@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Feed</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <nav>
+    <a href="index.html">🏠 Feed</a>
+    <a href="notifications.html">🔔 Notifications</a>
+    <a href="#" onclick="logout()">🚪 Logout</a>
+  </nav>
+
+  <h2>Create a Post</h2>
+  <form id="createPostForm">
+    <textarea id="postContent" placeholder="What's on your mind?" required></textarea><br>
+    <input type="text" id="postImage" placeholder="Optional image URL"><br>
+    <button type="submit">Post</button>
+  </form>
+
+  <hr>
+
+  <h2>Your Feed</h2>
+  <div id="postContainer">Loading...</div>
+
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/post.js"></script>
+</body>
+</html>
